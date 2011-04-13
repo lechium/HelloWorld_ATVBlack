@@ -1,0 +1,10 @@
+Architecture: iphoneos-arm
+Name: Hello World
+Package: com.test.helloworld
+Version: 0.1
+Website: mywebsite.com
+Maintainer: me
+Author: me
+Description: Put your description here
+Section: Utilities
+Depends: beigelist, mobilesubstrate
