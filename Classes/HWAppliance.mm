@@ -73,7 +73,16 @@
 @implementation HWAppliance
 @synthesize topShelfController = _topShelfController;
 
++ (void)forceCrash
+{
+	NSArray *theArray = [NSArray arrayWithObjects:@"thejesus", @"heyzus", nil];
+	NSLog(@"we should crash now");
+	id theObject = [theArray objectAtIndex:2];
+}
+
 + (void)initialize {
+	
+		//[HWAppliance forceCrash]; //in here solely to show how to use hwSymbols shell script	
 }
 
 

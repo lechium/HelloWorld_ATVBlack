@@ -29,7 +29,7 @@
 		875A8253126FFF5300ECADC2 /* BackRow */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BackRow; path = theos/include/BackRow; sourceTree = "<group>"; };
 		875A8427126FFF6D00ECADC2 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		875A86EB12704ACC00ECADC2 /* theos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = theos; sourceTree = "<group>"; };
-		8D5B49B6048680CD000E48DA /* HelloWorld.frappliance */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HelloWorld.frappliance; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D5B49B6048680CD000E48DA /* HW.frappliance */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HW.frappliance; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2F7E65807B2D6F200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
@@ -110,7 +110,7 @@
 		19C28FB8FE9D52D311CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D5B49B6048680CD000E48DA /* HelloWorld.frappliance */,
+				8D5B49B6048680CD000E48DA /* HW.frappliance */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -143,7 +143,7 @@
 			name = HelloWorld;
 			productInstallPath = "$(HOME)/Library/Bundles";
 			productName = atvTwo;
-			productReference = 8D5B49B6048680CD000E48DA /* HelloWorld.frappliance */;
+			productReference = 8D5B49B6048680CD000E48DA /* HW.frappliance */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -251,7 +251,7 @@
 				GCC_PREFIX_HEADER = atvTwo_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /_/Applications/AppleTV.app/Appliances/;
-				PRODUCT_NAME = HelloWorld;
+				PRODUCT_NAME = HW;
 				WRAPPER_EXTENSION = frappliance;
 			};
 			name = Debug;

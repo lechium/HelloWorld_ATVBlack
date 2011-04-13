@@ -1,0 +1,44 @@
+#/bin/bash
+
+
+hwBase=~/Projects/ATV2/HelloWorld_ATVBlack/
+applianceName=HW
+address=0x14a5000
+
+usage ()
+{
+    echo " "
+    echo          "usage: hwSymbols <address>"
+    echo " "
+    echo          "Symbolicate HW.frappliance crash lines."
+    echo          "	"
+    echo	  "     "
+    echo          "EXAMPLE"
+    echo          "     "
+    echo          "     10  HW                            	0x014a61e0 0x14a5000 + 4576"  
+    echo          "     11  HW                            	0x014a607e 0x14a5000 + 4222"
+    echo          "     "
+	echo ""
+    echo          "% hwSymbols 0x014a61e0"
+    echo " "
+	echo 	  "+[HWAppliance forceCrash] (in HW) (HWAppliance.mm:80)"
+	echo ""
+	echo "---------"
+	echo ""
+    echo "Input Error: You must a numeric address to symbolicate"
+    echo " "
+  
+}
+
+# if there aren't two arguments display usage and exit
+
+if [ $# != 1 ]; then
+   usage
+   exit
+fi
+
+
+cd $hwBase"/build/Debug-iphoneos"
+#echo cd $hwBase"/build/Debug-iphoneos"
+atos -o HW.frappliance/HW -arch arm -l $address $1
+#echo "atos -o HW.frappliance/HW -arch arm -l $address $1"
