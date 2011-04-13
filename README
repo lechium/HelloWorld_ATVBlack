@@ -1,0 +1,27 @@
+I will get into the credits and history of this project later, for now I'm going to give pertinent background information to help use this project successfully. (suffice it to say a lot of people put work into the initial version of this plugin being made and published several months ago DHowett, bholland, tomcool420 etc.. ill update this later with a more full list)
+
+Pre requisites: 
+
+Intel Mac With 10.6+
+Xcode 3.2.x
+macports (for .deb building through theos)
+iPhone 4.2+ SDK
+
+Basic understanding of Obj-C won't hurt either!!
+
+Instructions:
+
+Install the pre-requisites, open in Xcode, build! 
+
+Additional Notes:
+
+Take careful notes of the shell scripts running at the beginning and end of the target, with a little more tweaking it will utilize theos to build the dpkg files for us while keeping track of all the version increase intricacies. 
+
+The advantage of building through Xcode is the generation of dYSM files (aid's in using atos to symbolicate crash logs for your own appliances properly)
+in addition to easy static analysis to help isolate memory leaks/issues.
+
+theos violation: 
+
+i know i know, not supposed to include theos within a project, should have people checkout directly from DHowett. i was working on my own target (xpackage) that would forgo any of the internal building through theos and just build a package from a properly staged folder (staged through our shell script targets). I will work with dustin to make this more elegant and proper in the future.
+
+
