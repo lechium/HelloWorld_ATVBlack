@@ -13,9 +13,15 @@ Instructions:
 
 Install the pre-requisites, open in Xcode, build! 
 
+Additional Notes:
+
 Take careful notes of the shell scripts running at the beginning and end of the target, with a little more tweaking it will utilize theos to build the dpkg files for us while keeping track of all the version increase intricacies. 
 
 The advantage of building through Xcode is the generation of dYSM files (aid's in using atos to symbolicate crash logs for your own appliances properly)
 in addition to easy static analysis to help isolate memory leaks/issues.
+
+theos violation: 
+
+i know i know, not supposed to include theos within a project, should have people checkout directly from DHowett. i was working on my own target (xpackage) that would forgo any of the internal building through theos and just build a package from a properly staged folder (staged through our shell script targets). I will work with dustin to make this more elegant and proper in the future.
 
 
