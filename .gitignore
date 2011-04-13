@@ -2,4 +2,6 @@
 *.o
 obj
 build
+HelloWorld.xcodeproj/*.pbxuser
+HelloWorld.xcodeproj/*.perspectivev3
 
