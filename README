@@ -43,24 +43,7 @@ after macports is installed
 
   sudo ln −s /opt/local/bin/gnutar /opt/local/bin/tar
 
-4. make sure you have your ssh keys set up on the target device, if this is not done the script will fail at the ssh and scp steps
-
-if you dont already have an rsa (sic) key generated you can create one by doing the following
-
-ssh-keygen
-
-it will ask where to generate the file, the default location should be fine
-it is up to you whether you want a password on the file or not, after it is generated you can get the contents via
-
-cat ~/.ssh/id_rsa.pub
-
-those contents need to be added to ~/.ssh/authorized_keys on the target AppleTV and it needs to be ONE LINE per key added to authorized_keys, if the key is split into multiple lines it will NOT work.
-
-for a nice tutorial on how to do a similar setup on the original appletv here is a guide from the immortal awkwardtv wiki
-
-http://wiki.awkwardtv.org/wiki/Install_SSH#Logging_in_without_a_username_or_password
-
-obviously very little of this guide applies to the new AppleTV, i just thought its a good example of how to set up ssh without usernames and passwords mucking things up.
+4. if you dont have your id_rsa.pub key added to ~/.ssh/authorized_keys on the target AppleTV run the included ./magic.sh script and entire "alpine" when it prompts for a password.
 
 5. once this is all taken care of, you can build directly through xcode straight through the deb creation installation, and AppleTV reload all in one fluid step.
 
