@@ -78,6 +78,7 @@
 	NSArray *theArray = [NSArray arrayWithObjects:@"thejesus", @"heyzus", nil];
 	NSLog(@"we should crash now");
 	id theObject = [theArray objectAtIndex:2];
+	NSLog(@"theObject: %@", theObject);
 }
 
 + (void)initialize {
@@ -95,29 +96,6 @@
 	} return self;
 }
 
-- (id)applianceCategories {
-	return _applianceCategories;
-}
-
-- (id)identifierForContentAlias:(id)contentAlias {
-	return @"Hello World";
-}
-
-- (id)selectCategoryWithIdentifier:(id)ident {
-	//NSLog(@"selecteCategoryWithIdentifier: %@", ident);
-	return nil;
-}
-
-- (BOOL)handleObjectSelection:(id)fp8 userInfo:(id)fp12 {
-	NSLog(@"handleObjectSelection");
-	return YES;
-}
-
-- (id)applianceSpecificControllerForIdentifier:(id)arg1 args:(id)arg2 {
-	//NSLog(@"applianceSpecificControllerForIdentifier: %@ args: %@", arg1, arg2);
-	return nil;
-}
-
 - (id)controllerForIdentifier:(id)identifier args:(id)args
 {
 	id menuController = nil;
@@ -132,6 +110,33 @@
 	return menuController;
 	
 }
+
+
+
+- (id)applianceCategories {
+	return _applianceCategories;
+}
+
+- (id)identifierForContentAlias:(id)contentAlias {
+	return @"Hello World";
+}
+
+- (id)selectCategoryWithIdentifier:(id)ident {
+	//NSLog(@"selecteCategoryWithIdentifier: %@", ident);
+	return nil;
+}
+
+- (BOOL)handleObjectSelection:(id)fp8 userInfo:(id)fp12 {
+
+	return YES;
+}
+
+- (id)applianceSpecificControllerForIdentifier:(id)arg1 args:(id)arg2 {
+
+	return nil;
+}
+
+
 
 - (id)localizedSearchTitle { return @"Hello World"; }
 - (id)applianceName { return @"Hello World"; }

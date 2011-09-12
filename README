@@ -1,27 +1,77 @@
 I will get into the credits and history of this project later, for now I'm going to give pertinent background information to help use this project successfully. (suffice it to say a lot of people put work into the initial version of this plugin being made and published several months ago DHowett, bholland, tomcool420 etc.. ill update this later with a more full list)
 
+Im not going to update this preface any further except to say this latest version solely has changes to the run scripts to remove the need to build deb packages in theos, that being said, without theos, none of this would have ever been possible! Extra big thanks to Dustin again!
+
+One last note before we get into it, the RunScript.sh is identical to the on the target "Run Script" build phase, i just added it to a separate file so it could be easier to parse (maybe opening in Xcode or TextMate, we all need our context highlighting!
+
 Pre requisites: 
 
 Intel Mac With 10.6+
-Xcode 3.2.x
-macports (for .deb building through theos)
+Xcode 3.2.x or Xcode 4
+macports (for .deb building)
 iPhone 4.2+ SDK
+fauxsu (for maintaining proper ownership in the packages)
 
 Basic understanding of Obj-C won't hurt either!!
 
 Instructions:
 
-Install the pre-requisites, open in Xcode, build! 
+There is now only one script running after the build is completed, certain things have to be taken care of before this will run smoothly.
+
+1. need fauxsu installed ( git clone https://github.com/DHowett/fauxsu.git )
+
+( you should be able to figure out how to build and install that on your own )
+
+2. need macports installed
+
+(grab the proper dmg from below and install if you dont have it)
+
+https://distfiles.macports.org/MacPorts/MacPorts-2.0.3-10.5-Leopard.dmg
+https://distfiles.macports.org/MacPorts/MacPorts-2.0.3-10.6-SnowLeopard.dmg
+https://distfiles.macports.org/MacPorts/MacPorts-2.0.3-10.7-Lion.dmg
+
+after macports is installed
+
+1. install dpkg
+
+  sudo port install dpkg
+2. install gnutar
+
+  sudo port install gnutar
+
+3. symlink gnutar to tar
+
+  sudo ln −s /opt/local/bin/gnutar /opt/local/bin/tar
+
+4. make sure you have your ssh keys set up on the target device, if this is not done the script will fail at the ssh and scp steps
+
+if you dont already have an rsa (sic) key generated you can create one by doing the following
+
+ssh-keygen
+
+it will ask where to generate the file, the default location should be fine
+it is up to you whether you want a password on the file or not, after it is generated you can get the contents via
+
+cat ~/.ssh/id_rsa.pub
+
+those contents need to be added to ~/.ssh/authorized_keys on the target AppleTV and it needs to be ONE LINE per key added to authorized_keys, if the key is split into multiple lines it will NOT work.
+
+for a nice tutorial on how to do a similar setup on the original appletv here is a guide from the immortal awkwardtv wiki
+
+http://wiki.awkwardtv.org/wiki/Install_SSH#Logging_in_without_a_username_or_password
+
+obviously very little of this guide applies to the new AppleTV, i just thought its a good example of how to set up ssh without usernames and passwords mucking things up.
+
+5. once this is all taken care of, you can build directly through xcode straight through the deb creation installation, and AppleTV reload all in one fluid step.
+
 
 Additional Notes:
-
-Take careful notes of the shell scripts running at the beginning and end of the target, with a little more tweaking it will utilize theos to build the dpkg files for us while keeping track of all the version increase intricacies. 
 
 The advantage of building through Xcode is the generation of dYSM files (aid's in using atos to symbolicate crash logs for your own appliances properly)
 in addition to easy static analysis to help isolate memory leaks/issues.
 
 theos violation: 
 
-i know i know, not supposed to include theos within a project, should have people checkout directly from DHowett. i was working on my own target (xpackage) that would forgo any of the internal building through theos and just build a package from a properly staged folder (staged through our shell script targets). I will work with dustin to make this more elegant and proper in the future.
+this is going to be cleared up, technically we dont really /need/ theos anymore in this project, but for now we're still linking to includes from in there requisite for building so its not going anywhere ;-P
 
 

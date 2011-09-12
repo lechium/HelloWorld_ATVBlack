@@ -11,7 +11,6 @@
 		32799385135587E900CD2667 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 32799384135587E900CD2667 /* Info.plist */; };
 		875A824D126FFF1F00ECADC2 /* HWAppliance.mm in Sources */ = {isa = PBXBuildFile; fileRef = 875A824A126FFF1F00ECADC2 /* HWAppliance.mm */; };
 		875A824E126FFF1F00ECADC2 /* HWBasicMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 875A824C126FFF1F00ECADC2 /* HWBasicMenu.m */; };
-		875A8428126FFF6D00ECADC2 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 875A8427126FFF6D00ECADC2 /* Makefile */; };
 		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
@@ -130,7 +129,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1DEB913A08733D840010E9CD /* Build configuration list for PBXNativeTarget "HelloWorld" */;
 			buildPhases = (
-				32798B6113557F6E00CD2667 /* ShellScript */,
 				8D5B49AF048680CD000E48DA /* Resources */,
 				8D5B49B1048680CD000E48DA /* Sources */,
 				8D5B49B3048680CD000E48DA /* Frameworks */,
@@ -183,19 +181,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		32798B6113557F6E00CD2667 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#make clean\nrm -rf _\nmkdir -p _/Applications/AppleTV.app/Appliances\nmkdir -p _/Applications/Lowtide.app/Appliances\n#rsync -a layout/Library _/ --exclude \"_MTN\" --exclude \".git\" --exclude \".svn\" --exclude \".DS_Store\" --exclude \"._*\"\n#rsync -a layout/usr _/ --exclude \"_MTN\" --exclude \".git\" --exclude \".svn\" --exclude \".DS_Store\" --exclude \"._";
-		};
 		32798B6313557F9000CD2667 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -207,7 +192,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "FW_DEVICE_IP=apple-tv.local\nln -f -s /Applications/AppleTV.app/Appliances/${PRODUCT_NAME}.frappliance _/Applications/Lowtide.app/Appliances/\ntheos/bin/fakeroot.sh chown -R root:wheel _/\n#theos/bin/fakeroot.sh chmod 6755 _/usr/bin/mHelper _/usr/libexec/maint/setuid\nexport PATH=/opt/local/bin:/opt/local/sbin:${AWS_IAM_HOME}/bin/:/usr/local/git:$PATH\n#make package\n\n#or could try make xpackage install";
+			shellScript = "# this script was only possible because of Dustin Howetts epic theos project, thanks Dustin :)\n\n# we need to export this path because dpkg-deb is usually installed via macports\n\nexport PATH=/opt/local/bin:/opt/local/sbin:/usr/local/git:$PATH\nexport SRCROOT=\"$SRCROOT\"\n\n# only used if we SCP the deb over, and this only happens if dpkg-deb and fauxsu are installed\n\nATV_DEVICE_IP=apple-tv.local\n\n# xcodes path to the the full frappliance\n\nTARGET_BUILD_FRAPPLIANCE=\"$TARGET_BUILD_DIR\"/\"$PRODUCT_NAME\".$WRAPPER_EXTENSION\n\n# our layout dir and control file\n\nLAYOUT=\"$SRCROOT\"/layout\nCONTROL_FILE=\"$LAYOUT\"/DEBIAN/control\n\n# only needed if you have any mobile subtrate plugins involved, this may be taken care of by post scripts in theos, where its still the easiest to build ms tweaks\n\nSUBSTRATE_LAYOUT_PATH=\"$LAYOUT\"/Library/MobileSubstrate/DynamicLibraries\n\n# build directory for theos, we're still following his format and style as closely as possible\n\nDPKG_BUILD_PATH=\"$SRCROOT\"/_\n\n# DEBIAN location in the staging / build directory\n\nDPKG_DEBIAN_PATH=\"$DPKG_BUILD_PATH\"/DEBIAN\n\nAPPLETV_APPLIANCE_FOLDER=\"$DPKG_BUILD_PATH\"/Applications/AppleTV.app/Appliances/\n\n# cant get the linking part to work, not sure what kind of magic he is working to have the proper root folder in theos when running the after processes, so we arent using this for now\n\nLOWTIDE_APPLIANCE_FOLDER=\"$DPKG_BUILD_PATH\"/Applications/Lowtide.app/Appliances/\n\n# final frappliance location in the staging directory\n\nFINAL_PLUGIN_PATH=$APPLETV_APPLIANCE_FOLDER/\"$PRODUCT_NAME\".$WRAPPER_EXTENSION\n\n# paths for the appliances\n\n#mkdir -p $LOWTIDE_APPLIANCE_FOLDER\nmkdir -p $APPLETV_APPLIANCE_FOLDER\n\n# make sure these are all there\n\nmkdir -p \"$DPKG_BUILD_PATH\"\n\nmkdir -p \"$DPKG_DEBIAN_PATH\"\n\n# for this particular project we dont need this directory, but if you have ms tweaks involved you will want to comment this back in\n\n#mkdir -p $SUBSTRATE_LAYOUT_PATH\n\n# plucked from package.mk in theos/makesfiles lines 39-41 and adapted for shell/bash script\n\nCONTROL_PACKAGE_NAME=`cat layout/DEBIAN/control | grep \"^Package:\" | cut -d' ' -f2-`\nCONTROL_PACKAGE_ARCH=`cat layout/DEBIAN/control | grep \"^Architecture:\" | cut -d' ' -f2-`\nCONTROL_PACKAGE_BASE_VERSION=`cat layout/DEBIAN/control | grep \"^Version:\" | cut -d' ' -f2-`\n\n# i dont quite understand his fakeroot stuff so im just looking for a path to fauxsu\n\nFAUXSU_PATH=`which fauxsu`\n\n# we need dpkg-deb to make the package, this is the easiest way i can think of to find its location.\n\nDPKG_DEB_PATH=`which dpkg-deb`\n\n# echo $FINAL_PLUGIN_PATH\n\n# plucked and modified from theos/makesfiles/pacakge.mk as well, 46 - 56 (im including the $FINAL_PACKAGE_DEBVERSION code further down as well)\n# the first rsync command is syncing the layout folder with the _ folder, the second is syncing the frappliance into its final staging destination\n\nrsync -a \"$LAYOUT\"/ \"$DPKG_BUILD_PATH\"/ --exclude \"_MTN\" --exclude \".git\" --exclude \".svn\" --exclude \".DS_Store\" --exclude \"._*\" --exclude \"/.Spotlight-V100\" --exclude \"/.Trashes\"\nrsync -a \"$TARGET_BUILD_FRAPPLIANCE\"/ \"$FINAL_PLUGIN_PATH\"/ --exclude \"_MTN\" --exclude \".git\" --exclude \".svn\" --exclude \".DS_Store\" --exclude \"._*\" --exclude \"/.Spotlight-V100\" --exclude \"/.Trashes\"\n\n\n# had to move SIZE down because the size would've been for the prior build and not the current because it was run before rsync steps, thanks again Dustin !!\n\nSIZE=`du -I DEBIAN -ks _ | cut -f 1` \n\n#echo $SIZE\n\n# package_v.sh is nearly identical to the one in theos/bin with basically one variable swapped with $SRCROOT, one line cant describe the awesomness of that script.\n\n# short and skinny it checks the base version of the layout control file and compares it against the .theos/packages/ folder information to find the next proper build number\n# and it writes a new control file with the proper Version: into the staging DEBIAN directory\n\n\"$SRCROOT\"/package_v.sh -c ${CONTROL_FILE} > \"$DPKG_DEBIAN_PATH\"/control\n\n# adding Installed-Size: to the final DEBIAN/control file\n\necho \"Installed-Size: $SIZE\" >> \"$DPKG_DEBIAN_PATH\"/control\n\n# pluck out this version we just slipped into the new control file for purposes of the end deb package name\n\nFINAL_PACKAGE_DEBVERSION=`cat \"$DPKG_DEBIAN_PATH\"/control | grep \"^Version:\"| cut -d' ' -f2`\n\n# the big enchirido, the full package name in all its glory\n\nFILENAME=\"$CONTROL_PACKAGE_NAME\"_\"$FINAL_PACKAGE_DEBVERSION\"_\"$CONTROL_PACKAGE_ARCH\".deb\n\necho \"$FILENAME\"\n\n# at this point we have the staging are all set and we just need to fix owners/permissions on the staging directoy and build the deb package\n\n\n#does fauxsu exist?\n\nif [ -f \"$FAUXSU_PATH\" ]; then \n\n\techo \"we got fauxsu!\"\n\t\n\t# root:wheel ownership to the entire staging directory\n\t\n\t\"$FAUXSU_PATH\" chown -R root:wheel \"$DPKG_BUILD_PATH\"/\n\t\n\t# check for dpkg-deb, necessary to build the deb package\n\t\n\tif [ -f \"$DPKG_DEB_PATH\" ]; then\n\t\techo \"we have dpkg-deb too!\"\n\t\t\"$FAUXSU_PATH\" \"$DPKG_DEB_PATH\" -b \"$DPKG_BUILD_PATH\" \"$SRCROOT\"/\"$FILENAME\"\n\t\t\n\t\t# these lines were plucked from the theos/bin/install.exec and theos/bin/install.copyFile\n\t\t\n\t\t# scp the deb over into ~ \n\t\t\n\t\tscp -P 22 \"$SRCROOT\"/\"$FILENAME\" root@$ATV_DEVICE_IP:~\n\t\t\n\t\t# install the dpkg\n\t\t\n\t\tssh -p 22 root@$ATV_DEVICE_IP \"dpkg -i \"$FILENAME\"\"\n\t\t\n\t\t# restart Lowtide/AppleTV.app\n\t\t\n\t\tssh -p 22 root@$ATV_DEVICE_IP \"killall -9 AppleTV\"\n\t\t\n\t\t# done and done!\n\t\t\n\telse # DPKG_DEB_PATH check\n\t\t\n\t\techo \"You need dpkg-deb installed to create the deb packages, macports is recommended for easiest and quickest installation!!\"\n\t\t\n\tfi \n\t\n\telse # fauxsu check\n\n\techo \"You need Dustin Howetts fauxsu installed to maintain proper permissions and ownership of the packages built. git clone https://github.com/DHowett/fauxsu.git and then build and install\"\nfi\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -218,7 +203,6 @@
 			files = (
 				875A824D126FFF1F00ECADC2 /* HWAppliance.mm in Sources */,
 				875A824E126FFF1F00ECADC2 /* HWBasicMenu.m in Sources */,
-				875A8428126FFF6D00ECADC2 /* Makefile in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,7 +225,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
-				DEPLOYMENT_LOCATION = YES;
+				DEPLOYMENT_LOCATION = NO;
 				DSTROOT = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
